@@ -1,0 +1,4 @@
+{
+  "src/**/*.{js,jsx,ts,tsx}": ["eslint --fix --dir .", "prettier --write"],
+  "src/**/*.md": ["prettier --write"]
+}
