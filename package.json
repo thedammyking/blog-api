@@ -2,12 +2,11 @@
   "name": "blog-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "server.ts",
   "type": "module",
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "dev": "ts-node src/server.ts",
+    "start": "tsx src/server.ts",
+    "dev": "tsx watch src/server.ts",
     "lint": "eslint --fix",
     "db:generate": "drizzle-kit up",
     "db:migrate": "drizzle-kit push",
@@ -50,6 +49,6 @@
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "prettier": "^3.2.5",
-    "ts-node": "^10.9.2"
+    "tsx": "^4.15.1"
   }
 }
