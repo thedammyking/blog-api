@@ -24,7 +24,7 @@ app.use(responseHandler);
 
 //Routers
 app.use('/v1', v1Router);
-app.get('/', (_, res) => {
+app.get('/', (_req, res) => {
   res.send('Blog Rest API');
 });
 

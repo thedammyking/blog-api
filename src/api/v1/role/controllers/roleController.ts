@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from 'express';
 import { body, param } from 'express-validator';
 import RoleService from '@v1/role/services/roleService';
 
-import { setCacheHeader } from '@/lib/utils';
 import { validate } from '@/middlewares/validate';
 
 class RoleController {
@@ -24,10 +23,9 @@ class RoleController {
     }
   ];
 
-  getRoles = async (_: Request, res: Response, next: NextFunction) => {
+  getRoles = async (_req: Request, res: Response, next: NextFunction) => {
     try {
       const role = await this.service.getRoles();
-      setCacheHeader(res, 30);
       return res.success(role);
     } catch (error) {
       return next(error);
@@ -48,7 +46,6 @@ class RoleController {
       try {
         const { id } = req.params;
         const role = await this.service.getRoleById(id);
-        setCacheHeader(res, 30);
         return res.success(role);
       } catch (error) {
         return next(error);

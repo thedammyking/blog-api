@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import supabase from '@/config/supabase';
 import APIError from '@/lib/error';
 
-export async function authenticateToken(req: Request, _: Response, next: NextFunction) {
+export async function authenticateToken(req: Request, _res: Response, next: NextFunction) {
   try {
     const token = req.headers.authorization?.split(' ')[1];
 
@@ -21,7 +21,7 @@ export async function authenticateToken(req: Request, _: Response, next: NextFun
 }
 
 export const authorizeRoles =
-  (roles: string[]) => async (req: Request, _: Response, next: NextFunction) => {
+  (roles: string[]) => async (req: Request, _res: Response, next: NextFunction) => {
     const user = req.user;
     if (!roles.includes(user?.user_metadata.role)) {
       return next(new APIError({ statusCode: 403, message: 'Action Not Allowed' }));

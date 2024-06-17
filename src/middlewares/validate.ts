@@ -4,7 +4,7 @@ import { ContextRunner } from 'express-validator';
 import APIError from '@/lib/error';
 
 export const validate = (validations: ContextRunner[]) => {
-  return async (req: Request, _: Response, next: NextFunction) => {
+  return async (req: Request, _res: Response, next: NextFunction) => {
     for (const validation of validations) {
       const result = await validation.run(req);
       if (!result.isEmpty()) {
