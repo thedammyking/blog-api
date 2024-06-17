@@ -6,7 +6,7 @@ import * as Sentry from '@sentry/node';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
 
-import v1Router from '@/api/v1';
+import v1Router from '@v1';
 import corsMiddleware from '@/middlewares/cors';
 import errorHandler from '@/middlewares/errorHandler';
 import rateLimiter from '@/middlewares/rateLimiter';

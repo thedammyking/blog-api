@@ -1,20 +1,18 @@
 import express from 'express';
-import { param } from 'express-validator';
-
-import { validate } from '@/middlewares/validate';
+import RoleController from '@v1/role/controllers/roleController';
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  res.success({ hd: 'hdjsfd' });
-});
+const controllers = new RoleController();
 
-router.get(
-  '/:id',
-  validate([param('id').isString().notEmpty().escape().trim().isUUID().withMessage('Invalid ID')]),
-  (req, res) => {
-    res.success({ hd: req.params.id });
-  }
-);
+router.post('/add', controllers.createRole);
+
+router.get('/', controllers.getRoles);
+
+router.get('/:id', controllers.getRoleById);
+
+router.put('/:id', controllers.updateRole);
+
+router.delete('/:id', controllers.deleteRole);
 
 export default router;

@@ -6,7 +6,7 @@ import { UserRoles } from '@/types/db';
 
 export const role = pgTable('roles', {
   id: uuid('id').primaryKey().defaultRandom(),
-  value: varchar('value').default(UserRoles.Reader),
+  value: varchar('value').unique().default(UserRoles.Reader),
   label: varchar('label').default('Reader'),
   createdAt: timestamp('created_at', TIMESTAMP_OPTIONS).defaultNow(),
   updatedAt: timestamp('updated_at', TIMESTAMP_OPTIONS)

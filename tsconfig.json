@@ -14,7 +14,9 @@
     "sourceMap": true,
     "paths": {
       "@/*": ["./src/*"],
-      "$/*": ["./*"]
+      "$/*": ["./*"],
+      "@v1": ["./src/api/v1"],
+      "@v1/*": ["./src/api/v1/*"]
     },
     "outDir": "./dist",
     "forceConsistentCasingInFileNames": true,

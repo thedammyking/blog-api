@@ -1,76 +1,102 @@
+import { NextFunction, Request, Response } from 'express';
 import { body, param } from 'express-validator';
-import { NextRequest, NextResponse } from 'next/server';
+import RoleService from '@v1/role/services/roleService';
 
-import { Sentry } from '@/lib/sentry';
-import { validate } from '@/middleware/validation';
+import { validate } from '@/middlewares/validate';
 
-import { PostService } from '../services/postService';
+class RoleController {
+  private service = new RoleService();
 
-const postService = new PostService();
-
-export const getPostById = async (req: NextRequest) => {
-  const { id } = req.nextUrl.searchParams;
-  try {
-    const post = await postService.getPostById(id as string);
-    return NextResponse.json({ success: true, data: post });
-  } catch (error) {
-    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
-  }
-};
-
-export const createPost = [
-  validate([
-    body('title').notEmpty().withMessage('Title is required'),
-    body('excerpt').notEmpty().withMessage('Excerpt is required'),
-    body('body').notEmpty().withMessage('Body is required'),
-    body('userId').isUUID().withMessage('User ID must be a valid UUID'),
-    body('featuredImage').notEmpty().withMessage('Featured image is required')
-  ]),
-  async (req: NextRequest) => {
-    try {
-      const { title, excerpt, body, userId, featuredImage } = await req.json();
-      const post = await postService.createPost({ title, excerpt, body, userId, featuredImage });
-      return NextResponse.json({ success: true, data: post });
-    } catch (error) {
-      return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+  createRole = [
+    validate([
+      body('label').notEmpty().withMessage('Label is required').trim().escape(),
+      body('value').notEmpty().withMessage('Value is required').trim().escape()
+    ]),
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { label, value } = req.body;
+        const role = await this.service.createRole({ value, label });
+        return res.success(role);
+      } catch (error) {
+        return next(error);
+      }
     }
-  }
-];
+  ];
 
-export const updatePost = [
-  validate([
-    param('id').isUUID().withMessage('Post ID must be a valid UUID'),
-    body('title').optional().notEmpty().withMessage('Title is required'),
-    body('excerpt').optional().notEmpty().withMessage('Excerpt is required'),
-    body('body').optional().notEmpty().withMessage('Body is required'),
-    body('featuredImage').optional().notEmpty().withMessage('Featured image is required')
-  ]),
-  async (req: NextRequest) => {
-    const { id } = req.nextUrl.searchParams;
+  getRoles = async (_: Request, res: Response, next: NextFunction) => {
     try {
-      const { title, excerpt, body, featuredImage } = await req.json();
-      const post = await postService.updatePost(id as string, {
-        title,
-        excerpt,
-        body,
-        featuredImage
-      });
-      return NextResponse.json({ success: true, data: post });
+      const role = await this.service.getRoles();
+      return res.success(role);
     } catch (error) {
-      return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+      return next(error);
     }
-  }
-];
+  };
 
-export const deletePost = [
-  validate([param('id').isUUID().withMessage('Post ID must be a valid UUID')]),
-  async (req: NextRequest) => {
-    const { id } = req.nextUrl.searchParams;
-    try {
-      const post = await postService.deletePost(id as string);
-      return NextResponse.json({ success: true, data: post });
-    } catch (error) {
-      return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+  getRoleById = [
+    validate([
+      param('id')
+        .notEmpty()
+        .withMessage('ID is required')
+        .isUUID()
+        .withMessage('Role ID must be a valid UUID')
+        .trim()
+        .escape()
+    ]),
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { id } = req.params;
+        const role = await this.service.getRoleById(id);
+        return res.success(role);
+      } catch (error) {
+        return next(error);
+      }
     }
-  }
-];
+  ];
+
+  updateRole = [
+    validate([
+      param('id')
+        .notEmpty()
+        .withMessage('ID is required')
+        .isUUID()
+        .withMessage('Role ID must be a valid UUID')
+        .trim()
+        .escape(),
+      body('label').optional().notEmpty().withMessage('Label is required').trim().escape(),
+      body('value').optional().notEmpty().withMessage('Value is required').trim().escape()
+    ]),
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { id } = req.params;
+        const { label, value } = req.body;
+        const role = await this.service.updateRole(id, { value, label });
+        return res.success(role);
+      } catch (error) {
+        return next(error);
+      }
+    }
+  ];
+
+  deleteRole = [
+    validate([
+      param('id')
+        .notEmpty()
+        .withMessage('ID is required')
+        .isUUID()
+        .withMessage('Role ID must be a valid UUID')
+        .trim()
+        .escape()
+    ]),
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { id } = req.params;
+        const role = await this.service.deleteRole(id);
+        return res.success(role);
+      } catch (error) {
+        return next(error);
+      }
+    }
+  ];
+}
+
+export default RoleController;

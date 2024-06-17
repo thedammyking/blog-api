@@ -7,7 +7,7 @@ import roleRouter from './role';
 
 const router = express.Router();
 
-router.use('/role', roleRouter);
+router.use('/roles', roleRouter);
 router.use('/post', authenticateToken, postRouter);
 
 export default router;
