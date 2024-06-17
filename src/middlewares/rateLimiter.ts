@@ -4,8 +4,8 @@ import { ResponseStatus } from '@/types/generics';
 
 const rateLimiter = () => {
   return rateLimit({
-    windowMs: 4 * 60 * 1000, // 15 minutes
-    max: 3, // Limit each IP to 100 requests per window
+    windowMs: 5 * 60 * 1000, // 5 minutes
+    max: 100, // Limit each IP to 100 requests per window
     message: {
       status: ResponseStatus.Error,
       data: {
