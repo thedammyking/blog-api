@@ -29,14 +29,17 @@
           {
             "groups": [
               // Packages `react` related packages come first.
-              ["^react", "^@?\\w"],
+              ["^express", "^@?\\w"],
               // Internal packages.
-              ["^(@|src/db)(/.*|$)"],
-              ["^(@|src/env)(/.*|$)"],
-              ["^(@|src/data)(/.*|$)"],
+              ["^(@|src/api)(/.*|$)"],
               ["^(@|src/config)(/.*|$)"],
-              ["^(@|src/types)(/.*|$)"],
+              ["^(@|src/db)(/.*|$)"],
+              ["^(@|src/data)(/.*|$)"],
+              ["^(@|src/env)(/.*|$)"],
               ["^(@|src/lib)(/.*|$)"],
+              ["^(@|src/middlewares)(/.*|$)"],
+              ["^(@|src/validators)(/.*|$)"],
+              ["^(@|src/types)(/.*|$)"],
               // Side effect imports.
               ["^\\u0000"],
               // Parent imports. Put `..` last.

@@ -13,11 +13,13 @@
     "incremental": true,
     "sourceMap": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "$/*": ["./*"]
     },
     "outDir": "./dist",
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "typeRoots": ["@/types"]
   },
-  "include": ["./src/**/*.ts"],
+  "include": ["src/**/*.ts", "drizzle.config.ts", "src/instrument.ts"],
   "exclude": ["node_modules"]
 }
