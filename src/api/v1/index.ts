@@ -1,13 +1,12 @@
 import express from 'express';
+import PostRouter from '@v1/Routers/PostRouter';
+import RoleRouter from '@v1/Routers/RoleRouter';
 
 import { authenticateToken } from '@/middlewares/auth';
 
-import postRouter from './post';
-import roleRouter from './role';
+const ApiRouter = express.Router();
 
-const router = express.Router();
+ApiRouter.use('/roles', RoleRouter);
+ApiRouter.use('/posts', authenticateToken, PostRouter);
 
-router.use('/roles', roleRouter);
-router.use('/post', authenticateToken, postRouter);
-
-export default router;
+export default ApiRouter;

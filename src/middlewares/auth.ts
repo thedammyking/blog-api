@@ -23,7 +23,7 @@ export async function authenticateToken(req: Request, _res: Response, next: Next
 export const authorizeRoles =
   (roles: string[]) => async (req: Request, _res: Response, next: NextFunction) => {
     const user = req.user;
-    if (!roles.includes(user?.user_metadata.role)) {
+    if (user?.user_metadata?.role?.value && !roles.includes(user?.user_metadata?.role?.value)) {
       return next(new APIError({ statusCode: 403, message: 'Action Not Allowed' }));
     }
     return next();
