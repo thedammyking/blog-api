@@ -13,3 +13,11 @@ export const updateRoleDataValidator = z
     value: z.string().optional()
   })
   .required();
+
+export const roleDataValidator = z
+  .object({
+    label: z.string(),
+    value: z.string(),
+    id: z.string()
+  })
+  .required();

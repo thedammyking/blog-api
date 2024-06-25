@@ -4,7 +4,7 @@ import RoleRepository from '@v1/Repositories/RoleRepository';
 import { ROLES_ACCESSIBLE_TO_UNAUTHENTICATED } from '@/data/constants';
 import APIError from '@/lib/error';
 import { CreateRoleData, Roles } from '@/types/entities/role';
-import { createRoleDataValidator, updateRoleDataValidator } from '@/validators/services';
+import { createRoleDataValidator, updateRoleDataValidator } from '@/validators/role';
 
 class RoleService {
   private repository = new RoleRepository();
