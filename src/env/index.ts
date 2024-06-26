@@ -10,6 +10,9 @@ const stringBoolean = z.coerce
   .default('false');
 
 const EnvSchema = z.object({
+  MODE: z.string(),
+  PROD: z.boolean(),
+  DEV: z.boolean(),
   SUPABASE_URL: z.string(),
   SUPABASE_ANON_KEY: z.string(),
   DATABASE_URL: z.string(),
@@ -29,8 +32,15 @@ export type EnvSchema = z.infer<typeof EnvSchema>;
 
 expand(config());
 
+const allEnv = {
+  ...process.env,
+  MODE: process.env.NODE_ENV,
+  PROD: process.env.NODE_ENV === 'production',
+  DEV: process.env.NODE_ENV === 'development'
+} as const;
+
 try {
-  EnvSchema.parse(process.env);
+  EnvSchema.parse(allEnv);
 } catch (error) {
   if (error instanceof ZodError) {
     let message = 'Missing required values in .env:\n';
@@ -45,4 +55,4 @@ try {
   }
 }
 
-export default EnvSchema.parse(process.env);
+export default EnvSchema.parse(allEnv);

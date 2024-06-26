@@ -1,16 +1,12 @@
-export interface Role {
-  label: string;
-  value: Roles;
-  id: string;
-  createdAt: Date | null;
-  updatedAt: Date | null;
-  deletedAt: Date | null;
-}
+import { z } from 'zod';
 
-export interface CreateRoleData {
-  label: string;
-  value: string;
-}
+import { insertRoleSchema, selectRoleSchema, updateRoleSchema } from '@/db/schema';
+
+export type Role = z.infer<typeof selectRoleSchema>;
+
+export type CreateRoleData = z.infer<typeof insertRoleSchema>;
+
+export type UpdateRoleData = z.infer<typeof updateRoleSchema>;
 
 export enum Roles {
   Editor = 'editor',

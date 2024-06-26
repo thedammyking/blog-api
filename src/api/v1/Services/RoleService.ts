@@ -2,15 +2,15 @@ import { User } from '@supabase/supabase-js';
 import RoleRepository from '@v1/Repositories/RoleRepository';
 
 import { ROLES_ACCESSIBLE_TO_UNAUTHENTICATED } from '@/data/constants';
+import { insertRoleSchema, updateRoleSchema } from '@/db/schema';
 import APIError from '@/lib/error';
 import { CreateRoleData, Roles } from '@/types/entities/role';
-import { createRoleDataValidator, updateRoleDataValidator } from '@/validators/role';
 
 class RoleService {
   private repository = new RoleRepository();
 
   async createRole(data: CreateRoleData) {
-    await createRoleDataValidator.parse(data);
+    await insertRoleSchema.parse(data);
     const role = await this.repository.create(data);
     if (!role) throw new APIError({ statusCode: 503, message: 'Failed to create role' });
     return role;
@@ -39,13 +39,14 @@ class RoleService {
   }
 
   async updateRole(id: string, data: Partial<CreateRoleData>) {
-    await updateRoleDataValidator.parse(data);
+    await updateRoleSchema.parse(data);
     const role = await this.repository.update(id, data);
     if (!role) throw new APIError({ statusCode: 503, message: 'Failed to update role' });
     return role;
   }
 
   async deleteRole(id: string) {
+    // eslint-disable-next-line drizzle/enforce-delete-with-where
     const role = await this.repository.delete(id);
     if (!role) throw new APIError({ statusCode: 503, message: 'Failed to delete role' });
     return role;
