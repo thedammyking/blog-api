@@ -1,5 +1,6 @@
 import { sql } from 'drizzle-orm';
 import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
 import { TIMESTAMP_OPTIONS } from '@/data/constants';
 
@@ -20,3 +21,14 @@ export const comment = pgTable('comments', {
     .$onUpdate(() => sql`now()`),
   deletedAt: timestamp('deleted_at', TIMESTAMP_OPTIONS)
 });
+
+export const insertCommentSchema = createInsertSchema(comment).pick({
+  content: true,
+  postId: true,
+  readerId: true,
+  parentId: true
+});
+
+export const updateCommentSchema = insertCommentSchema.partial();
+
+export const selectCommentSchema = createSelectSchema(comment);

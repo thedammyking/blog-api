@@ -2,7 +2,7 @@ import { and, count, desc, eq, isNull, lte, sql } from 'drizzle-orm';
 
 import { db } from '@/db';
 import * as schema from '@/db/schema';
-import { CreateRoleData, Role } from '@/types/entities/role';
+import { CreateRoleData, Role, UpdateRoleData } from '@/types/entities/role';
 import { PaginatationQuery } from '@/types/generics';
 
 class RoleRepository {
@@ -41,7 +41,7 @@ class RoleRepository {
     });
   }
 
-  async update(id: string, data: Partial<CreateRoleData>) {
+  async update(id: string, data: UpdateRoleData) {
     return await this.db
       .update(schema.role)
       .set(data)
