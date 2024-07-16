@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { ContextRunner } from 'express-validator';
 
-import APIError from '@/lib/error';
+import ValidationError from '@/errors/ValidationError';
 
 export const validate = (validations: ContextRunner[]) => {
   return async (req: Request, _res: Response, next: NextFunction) => {
@@ -9,10 +9,8 @@ export const validate = (validations: ContextRunner[]) => {
       const result = await validation.run(req);
       if (!result.isEmpty()) {
         return next(
-          new APIError({
-            message: 'Input validation failed',
-            statusCode: 422,
-            error: result.mapped()
+          new ValidationError({
+            fields: result.mapped()
           })
         );
       }

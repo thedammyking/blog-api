@@ -4,10 +4,10 @@ export enum ResponseStatus {
 }
 
 export type ErrorData = {
-  statusCode: number;
-  message: string;
+  statusCode?: number;
+  message?: string;
   description?: string;
-  error?: Record<string, any>;
+  fields?: Record<string, any>;
 };
 
 export type Paginatation = {

@@ -1,8 +1,8 @@
-import { and, count, desc, eq, isNull, lte, sql } from 'drizzle-orm';
+import { and, count, desc, eq, isNull, lte, not, sql } from 'drizzle-orm';
 
 import { db } from '@/db';
 import * as schema from '@/db/schema';
-import { CreateRoleData, Role, UpdateRoleData } from '@/types/entities/role';
+import { CreateRoleData, Role, Roles, UpdateRoleData } from '@/types/entities/role';
 import { PaginatationQuery } from '@/types/generics';
 
 class RoleRepository {
@@ -41,6 +41,12 @@ class RoleRepository {
     });
   }
 
+  async getByValue(value: Roles) {
+    return await this.db.query.role.findFirst({
+      where: and(eq(schema.role.value, value))
+    });
+  }
+
   async update(id: string, data: UpdateRoleData) {
     return await this.db
       .update(schema.role)
@@ -54,6 +60,14 @@ class RoleRepository {
       .update(schema.role)
       .set({ deletedAt: sql`now()` })
       .where(and(eq(schema.role.id, id), isNull(schema.role.deletedAt)))
+      .returning();
+  }
+
+  async undelete(id: string) {
+    return await this.db
+      .update(schema.role)
+      .set({ deletedAt: null })
+      .where(and(eq(schema.role.id, id), not(isNull(schema.role.deletedAt))))
       .returning();
   }
 }

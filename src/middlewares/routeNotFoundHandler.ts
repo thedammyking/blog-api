@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 
-import APIError from '@/lib/error';
+import NotFoundError from '@/errors/NotFoundError';
 
 const routeNotFoundHandler = (_req: Request, _res: Response, next: NextFunction) => {
-  next(new APIError({ statusCode: 404, message: 'Path not found' }));
+  next(new NotFoundError({ message: 'Resource not found' }));
 };
 
 export default routeNotFoundHandler;

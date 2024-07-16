@@ -2,8 +2,9 @@ import { NextFunction, Request, Response } from 'express';
 import { body, param, query } from 'express-validator';
 
 import { authenticateToken, authorizeRoles } from '@/middlewares/auth';
+import cacheControl from '@/middlewares/cacheControl';
 import { validate } from '@/middlewares/validate';
-import { CreateRoleData } from '@/types/entities/role';
+import { CreateRoleData, Roles } from '@/types/entities/role';
 import { PaginatationQuery } from '@/types/generics';
 import RoleService from '@/v1/Services/RoleService';
 
@@ -12,7 +13,7 @@ class RoleController {
 
   createRole = [
     authenticateToken,
-    authorizeRoles(['admin']),
+    authorizeRoles([Roles.Admin, Roles.SuperAdmin]),
     validate([
       body('label').notEmpty().withMessage('Label is required').trim().escape(),
       body('value').notEmpty().withMessage('Value is required').trim().escape(),
@@ -29,6 +30,7 @@ class RoleController {
   ];
 
   getRoles = [
+    cacheControl(60),
     validate([
       query('page').optional().trim().escape().toInt(),
       query('limit').optional().trim().escape().toInt()
@@ -47,6 +49,7 @@ class RoleController {
   ];
 
   getRoleById = [
+    cacheControl(60),
     validate([
       param('id')
         .notEmpty()
@@ -69,7 +72,7 @@ class RoleController {
 
   updateRole = [
     authenticateToken,
-    authorizeRoles(['admin']),
+    authorizeRoles([Roles.Admin, Roles.SuperAdmin]),
     validate([
       param('id')
         .notEmpty()
@@ -97,7 +100,7 @@ class RoleController {
 
   deleteRole = [
     authenticateToken,
-    authorizeRoles(['admin']),
+    authorizeRoles([Roles.Admin, Roles.SuperAdmin]),
     validate([
       param('id')
         .notEmpty()

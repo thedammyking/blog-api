@@ -1,10 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 
-import APIError from '../lib/error';
+import ApiError from '@/errors/ApiError';
 
-const errorHandler = (err: APIError, _req: Request, res: Response, next: NextFunction) => {
+const errorHandler = (err: ApiError, _req: Request, res: Response, next: NextFunction) => {
   if (res.headersSent) return next(err);
-  res.error(err);
+
+  if (err.data) res.error(err);
+  else res.error(new ApiError({ message: 'Something went wrong' }));
 };
 
 export default errorHandler;

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 
-import APIError from '@/lib/error';
+import ApiError from '@/errors/ApiError';
 import { ResponseStatus } from '@/types/generics';
 
 const responseHandler = (req: Request, res: Response, next: NextFunction) => {
@@ -18,7 +18,7 @@ const responseHandler = (req: Request, res: Response, next: NextFunction) => {
     };
     const shouldShowStack = Boolean(req.query.debug ? Number(req.query.debug) : 0);
 
-    if (error instanceof APIError) data = error.data;
+    if (error instanceof ApiError) data = error.data;
 
     if (process.env.NODE_ENV === 'development' || shouldShowStack) data.stack = error.stack;
 
