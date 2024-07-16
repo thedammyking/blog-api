@@ -20,10 +20,13 @@ export default async function seed(db: db) {
             postId: post.id
           })
           .returning();
+        const randomCommentIndex = Math.floor(Math.random() * comments.length);
         await Promise.all(
-          comments.map(async comment => {
-            await db.insert(schema.commentChild).values({
+          comments.slice(0, randomCommentIndex).map(async comment => {
+            await db.insert(schema.comment).values({
               ...comment,
+              readerId: env.SEED_READER_ID,
+              postId: post.id,
               parentId: insertedComment.id
             });
           })

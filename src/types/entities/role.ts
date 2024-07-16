@@ -10,6 +10,7 @@ export type UpdateRoleData = z.infer<typeof updateRoleSchema>;
 
 export enum Roles {
   Editor = 'editor',
+  Reader = 'reader',
   SuperAdmin = 'super-admin',
-  Reader = 'reader'
+  Admin = 'admin'
 }

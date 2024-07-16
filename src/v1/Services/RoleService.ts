@@ -1,10 +1,12 @@
 import { User } from '@supabase/supabase-js';
-import RoleRepository from '@v1/Repositories/RoleRepository';
 
-import { ROLES_ACCESSIBLE_TO_UNAUTHENTICATED } from '@/data/constants';
+import { PAGINATION_DEFAULT } from '@/data/constants';
 import { insertRoleSchema, updateRoleSchema } from '@/db/schema';
 import APIError from '@/lib/error';
-import { CreateRoleData, Roles } from '@/types/entities/role';
+import { generatePaginationMeta } from '@/lib/utils';
+import { CreateRoleData } from '@/types/entities/role';
+import { PaginatationQuery } from '@/types/generics';
+import RoleRepository from '@/v1/Repositories/RoleRepository';
 
 class RoleService {
   private repository = new RoleRepository();
@@ -16,25 +18,24 @@ class RoleService {
     return role;
   }
 
-  async getRoles(user: User | null) {
-    const roles = await this.repository.getAll();
-    if (!roles) throw new APIError({ statusCode: 404, message: 'No roles found' });
-    if (!user || user.user_metadata.role.value !== Roles.SuperAdmin)
-      return roles.filter(
-        role => role.value && ROLES_ACCESSIBLE_TO_UNAUTHENTICATED.includes(role.value as Roles)
-      );
-    return roles;
+  async getRoles(user: User | null, paginatationQuery: Partial<PaginatationQuery>) {
+    const paginatation = { ...PAGINATION_DEFAULT, ...paginatationQuery };
+    const [data, count] = await this.repository.getAll(
+      paginatation,
+      user?.user_metadata?.role?.accessor || 0
+    );
+    if (!data) throw new APIError({ statusCode: 404, message: 'No roles found' });
+    return {
+      data,
+      meta: {
+        paginatation: generatePaginationMeta(count[0], paginatation)
+      }
+    };
   }
 
   async getRoleById(id: string, user: User | null) {
-    const role = await this.repository.getById(id);
+    const role = await this.repository.getById(id, user?.user_metadata?.role?.accessor || 0);
     if (!role) throw new APIError({ statusCode: 404, message: 'Role not found' });
-    if (
-      (!user || user.user_metadata.role.value !== Roles.SuperAdmin) &&
-      role.value &&
-      !ROLES_ACCESSIBLE_TO_UNAUTHENTICATED.includes(role.value as Roles)
-    )
-      throw new APIError({ statusCode: 401, message: 'Not authorized to view this role' });
     return role;
   }
 

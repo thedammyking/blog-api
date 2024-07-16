@@ -7,7 +7,7 @@ import 'express';
 declare global {
   namespace Express {
     interface Response {
-      success: (data: any) => void;
+      success: <D = any, M = any>(data: D, meta?: M) => void;
       error: (error: APIError) => void;
     }
     interface Request {

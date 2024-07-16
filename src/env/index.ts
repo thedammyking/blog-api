@@ -34,7 +34,7 @@ expand(config());
 
 const allEnv = {
   ...process.env,
-  MODE: process.env.NODE_ENV,
+  MODE: process.env.NODE_ENV || 'development',
   PROD: process.env.NODE_ENV === 'production',
   DEV: process.env.NODE_ENV === 'development'
 } as const;

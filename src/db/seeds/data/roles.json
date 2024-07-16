@@ -1,14 +1,22 @@
 [
   {
-    "value": "editor",
-    "label": "Editor"
+    "value": "super-admin",
+    "label": "Super Admin",
+    "accessor": 3
   },
   {
-    "value": "super-admin",
-    "label": "Super Admin"
+    "value": "admin",
+    "label": "Admin",
+    "accessor": 2
+  },
+  {
+    "value": "editor",
+    "label": "Editor",
+    "accessor": 1
   },
   {
     "value": "reader",
-    "label": "Reader"
+    "label": "Reader",
+    "accessor": 0
   }
 ]

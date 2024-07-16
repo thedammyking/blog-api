@@ -1,7 +1,7 @@
 import express from 'express';
-import RoleController from '@v1/Controllers/RoleController';
 
 import cacheControl from '@/middlewares/cacheControl';
+import RoleController from '@/v1/Controllers/RoleController';
 
 const RoleRouter = express.Router();
 

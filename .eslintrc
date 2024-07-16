@@ -5,7 +5,6 @@
   "extends": ["eslint:recommended", "prettier"],
   "rules": {
     "@typescript-eslint/no-unused-vars": "error",
-    "drizzle/enforce-delete-with-where": "error",
     "drizzle/enforce-update-with-where": "error",
     "simple-import-sort/exports": "error",
     "import/first": "error",
