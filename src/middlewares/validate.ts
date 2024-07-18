@@ -3,7 +3,7 @@ import { ContextRunner } from 'express-validator';
 
 import ValidationError from '@/errors/ValidationError';
 
-export const validate = (validations: ContextRunner[]) => {
+export default (validations: ContextRunner[]) => {
   return async (req: Request, _res: Response, next: NextFunction) => {
     for (const validation of validations) {
       const result = await validation.run(req);

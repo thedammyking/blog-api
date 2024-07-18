@@ -13,8 +13,10 @@ import RoleRepository from '@/v1/Repositories/RoleRepository';
 
 import Service from './Service';
 
-class RoleService extends Service {
-  private repository = new RoleRepository();
+export default class RoleService extends Service<RoleRepository> {
+  constructor() {
+    super(new RoleRepository());
+  }
 
   async createRole(data: CreateRoleData) {
     await insertRoleSchema.parse(data);
@@ -38,10 +40,11 @@ class RoleService extends Service {
 
   async getRoles(user: User | null, paginatationQuery: Partial<PaginatationQuery>) {
     const paginatation = { ...PAGINATION_DEFAULT, ...paginatationQuery };
-    const [data, count] = await this.repository.getAll(
+    const data = await this.repository.getAllRoles(
       paginatation,
       user?.user_metadata?.role?.accessor || 0
     );
+    const count = await this.repository.getTotal();
     if (!data) throw new RecordNotFoundError({ message: 'No roles found' });
     return {
       data,
@@ -52,7 +55,7 @@ class RoleService extends Service {
   }
 
   async getRoleById(id: string, user: User | null) {
-    const role = await this.repository.getById(id, user?.user_metadata?.role?.accessor || 0);
+    const role = await this.repository.getByRoleId(id, user?.user_metadata?.role?.accessor || 0);
     if (!role) throw new RecordNotFoundError({ message: 'Role not found' });
     return role;
   }
@@ -65,11 +68,8 @@ class RoleService extends Service {
   }
 
   async deleteRole(id: string) {
-    // eslint-disable-next-line drizzle/enforce-delete-with-where
     const role = await this.repository.delete(id);
     if (!role) throw new DeletingFailedError({ message: 'Failed to delete role' });
     return role;
   }
 }
-
-export default RoleService;

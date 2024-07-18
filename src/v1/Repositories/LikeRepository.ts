@@ -3,7 +3,7 @@ import { and, eq, isNotNull, isNull, sql } from 'drizzle-orm';
 import { db } from '@/db';
 import * as schema from '@/db/schema';
 
-class LikeRepository {
+export default class LikeRepository {
   private db = db;
 
   async add(readerId: string, postId: string) {
@@ -52,5 +52,3 @@ class LikeRepository {
       .returning();
   }
 }
-
-export default LikeRepository;

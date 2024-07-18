@@ -2,7 +2,7 @@ import cors, { CorsOptionsDelegate } from 'cors';
 
 import env from '@/env';
 
-const corsMiddleware = () => {
+export default () => {
   const whitelist = env.CORS_WHITELIST.split(',');
   const corsOptionsDelegate: CorsOptionsDelegate = function (req, callback) {
     let corsOptions;
@@ -15,5 +15,3 @@ const corsMiddleware = () => {
   };
   return cors(corsOptionsDelegate);
 };
-
-export default corsMiddleware;

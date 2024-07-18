@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import ApiError from '@/errors/ApiError';
 import { ResponseStatus } from '@/types/generics';
 
-const responseHandler = (req: Request, res: Response, next: NextFunction) => {
+export default (req: Request, res: Response, next: NextFunction) => {
   res.success = (data, meta) =>
     res.status(200).json({
       status: ResponseStatus.Success,
@@ -30,5 +30,3 @@ const responseHandler = (req: Request, res: Response, next: NextFunction) => {
 
   next();
 };
-
-export default responseHandler;

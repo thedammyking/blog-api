@@ -6,11 +6,8 @@ import { NextFunction, Request, Response } from 'express';
  * @param {Boolean} noCache - Determines if Cache should be set or not
  */
 
-const cacheControl =
-  (age: number, noCache = false) =>
+export default (age: number, noCache = false) =>
   (_req: Request, res: Response, next: NextFunction) => {
     res.setHeader('Cache-Control', noCache ? `no-cache` : `max-age=${age * 60}`);
     next();
   };
-
-export default cacheControl;
