@@ -1,16 +1,13 @@
 import { sql } from 'drizzle-orm';
-import { pgTable, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { pgTable, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 
 import { TIMESTAMP_OPTIONS } from '@/data/constants';
 
-import { post } from './post';
-
-export const like = pgTable('likes', {
+export const reaction = pgTable('reactions', {
   id: uuid('id').primaryKey().defaultRandom(),
+  emoji: varchar('emoji').notNull(),
   readerId: uuid('reader_id').notNull(),
-  postId: uuid('post_id')
-    .notNull()
-    .references(() => post.id),
+  resourceId: uuid('resource_id').notNull(),
   createdAt: timestamp('created_at', TIMESTAMP_OPTIONS).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', TIMESTAMP_OPTIONS)
     .notNull()

@@ -5,21 +5,19 @@ import env from '@/env';
 import posts from './data/posts.json';
 
 export default async function seed(db: db) {
-  await Promise.all(
-    posts.map(async (post, index) => {
-      const [insertedPost] = await db
-        .insert(schema.post)
-        .values({
-          ...post,
-          authorId: env.SEED_EDITOR_ID
-        })
-        .returning();
+  await posts.map(async (post, index) => {
+    const [insertedPost] = await db
+      .insert(schema.post)
+      .values({
+        ...post,
+        authorId: env.SEED_EDITOR_ID
+      })
+      .returning();
 
-      if ((index + 1) % 2)
-        await db.insert(schema.savedPost).values({
-          postId: insertedPost.id,
-          readerId: env.SEED_READER_ID
-        });
-    })
-  );
+    if ((index + 1) % 2)
+      await db.insert(schema.savedPost).values({
+        postId: insertedPost.id,
+        readerId: env.SEED_READER_ID
+      });
+  });
 }

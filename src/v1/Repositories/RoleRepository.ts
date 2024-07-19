@@ -1,14 +1,14 @@
 import { and, desc, eq, isNull, lte } from 'drizzle-orm';
 
-import * as schema from '@/db/schema';
+import { role } from '@/db/schema';
 import { Role, Roles } from '@/types/entities/role';
 import { PaginatationQuery } from '@/types/generics';
 
 import Repository from './Repository';
 
-export default class RoleRepository extends Repository<typeof schema.role> {
+export default class RoleRepository extends Repository<typeof role> {
   constructor() {
-    super(schema.role);
+    super(role);
   }
 
   async getAllRoles(paginatation: Required<PaginatationQuery>, accessor: Role['accessor']) {
@@ -33,7 +33,7 @@ export default class RoleRepository extends Repository<typeof schema.role> {
 
   async getByValue(value: Roles) {
     return await this.db.query.role.findFirst({
-      where: and(eq(schema.role.value, value))
+      where: and(eq(role.value, value))
     });
   }
 }

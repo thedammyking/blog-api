@@ -1,4 +1,4 @@
-import { and, count, desc, eq, isNull, not, Placeholder, SQL, sql } from 'drizzle-orm';
+import { and, count, desc, eq, isNotNull, isNull, Placeholder, SQL, sql } from 'drizzle-orm';
 import { PgTableWithColumns } from 'drizzle-orm/pg-core';
 
 import { db } from '@/db';
@@ -32,7 +32,21 @@ export default class Repository<T extends PgTableWithColumns<any> = PgTableWithC
       .offset((paginatation.page - 1) * paginatation.limit);
   }
 
-  async getTotal() {
+  async getAllById(
+    id: string,
+    key: keyof (typeof this.schema)['$inferInsert'],
+    paginatation: Required<PaginatationQuery>
+  ) {
+    return await this.db
+      .select()
+      .from(this.schema)
+      .where(and(eq(this.schema[key], id), isNull(this.schema.deletedAt)))
+      .orderBy(desc(this.schema.createdAt))
+      .limit(paginatation.limit)
+      .offset((paginatation.page - 1) * paginatation.limit);
+  }
+
+  async getCount() {
     return await this.db
       .select({
         total: count(this.schema.id)
@@ -41,9 +55,18 @@ export default class Repository<T extends PgTableWithColumns<any> = PgTableWithC
       .where(isNull(this.schema.deletedAt));
   }
 
-  async getById(id: string) {
+  async getCountById(id: string, key: keyof (typeof this.schema)['$inferInsert']) {
+    return await this.db
+      .select({
+        total: count(this.schema.id)
+      })
+      .from(this.schema)
+      .where(and(eq(this.schema[key], id), isNull(this.schema.deletedAt)));
+  }
+
+  async getById(id: string, key: keyof (typeof this.schema)['$inferInsert']) {
     return await this.db.query.role.findFirst({
-      where: and(eq(this.schema.id, id), isNull(this.schema.deletedAt))
+      where: and(eq(this.schema[key], id), isNull(this.schema.deletedAt))
     });
   }
 
@@ -77,7 +100,7 @@ export default class Repository<T extends PgTableWithColumns<any> = PgTableWithC
     return await this.db
       .update(this.schema)
       .set({ deletedAt: null })
-      .where(and(eq(this.schema.id, id), not(isNull(this.schema.deletedAt))))
+      .where(and(eq(this.schema.id, id), isNotNull(this.schema.deletedAt)))
       .returning();
   }
 }

@@ -44,7 +44,7 @@ export default class RoleService extends Service<RoleRepository> {
       paginatation,
       user?.user_metadata?.role?.accessor || 0
     );
-    const count = await this.repository.getTotal();
+    const count = await this.repository.getCount();
     if (!data) throw new RecordNotFoundError({ message: 'No roles found' });
     return {
       data,

@@ -1,9 +1,9 @@
-import * as schema from '@/db/schema';
+import { post } from '@/db/schema';
 
 import Repository from './Repository';
 
-export default class PostRepository extends Repository<typeof schema.post> {
+export default class PostRepository extends Repository<typeof post> {
   constructor() {
-    super(schema.post);
+    super(post);
   }
 }
